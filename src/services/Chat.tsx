@@ -19,7 +19,7 @@ export default function ChatProvider({ children }) {
         listeners.forEach((cb) => cb(message, context, setContext));
       }
     },
-    [listeners]
+    [context, listeners]
   );
   const showOptions = useCallback((options) => {
     setMessages((m) => [...m, { type: "options", options }]);
