@@ -2,6 +2,16 @@ import React from "react";
 import { SendOutlined } from "@ant-design/icons";
 
 export default function ChatPage() {
+  const data = [
+    {
+      type: "message",
+      message: "Olá, sou a Sofia, como posso te ajudar?",
+      origin: "bot",
+    },
+    { type: "options", options: ["Relatório", "Dica", "Renegociação"] },
+    { type: "message", message: "Renegociação", origin: "user" },
+  ];
+
   return (
     <div className="chat-page">
       <div className="chat-area">
@@ -9,25 +19,38 @@ export default function ChatPage() {
           <h2 className="title">Sofia</h2>
           <h2 className="tagline">O seu assistente financeiro</h2>
         </div>
-        <div className="messages-area">
-          <div className="message -bot">
-            Olá, sou a Sofia, como posso te ajudar?
-          </div>
-          <div className="options-group">
-            <button className="option">Relatório</button>
-            <button className="option">Dica</button>
-            <button className="option">Renegociação</button>
-          </div>
-          <div className="message -user">Renegociação</div>
-          <div className="message -bot">
-            Pois bem, para renegociação preciso consultar o fluxograma da Carol.
-          </div>
-        </div>
+        <MessageArea messages={data} />
         <div className="input-area">
           <input className="input" placeholder="Digite aqui sua mensagem" />
           <SendOutlined className="sendbutton" />
         </div>
       </div>
+    </div>
+  );
+}
+
+function MessageArea({ messages }) {
+  return (
+    <div className="messages-area">
+      {messages.map((item) => {
+        if (item.type === "options")
+          return <OptionsGroup options={item.options} />;
+
+        if (item.type === "message")
+          return (
+            <div className={`message -${item.origin}`}>{item.message}</div>
+          );
+      })}
+    </div>
+  );
+}
+
+function OptionsGroup({ options }) {
+  return (
+    <div className="options-group">
+      {options.map((option) => (
+        <button className="option">{option}</button>
+      ))}
     </div>
   );
 }
