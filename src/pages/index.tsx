@@ -1,49 +1,47 @@
-import React from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { SendOutlined } from "@ant-design/icons";
+import ChatProvider, { useChatState, useChatDispatch } from "services/Chat";
 
 export default function ChatPage() {
-  const data = [
-    {
-      type: "message",
-      message: "Olá, sou a Sofia, como posso te ajudar?",
-      origin: "bot",
-    },
-    { type: "options", options: ["Relatório", "Dica", "Renegociação"] },
-    { type: "message", message: "Renegociação", origin: "user" },
-    {
-      type: "message",
-      message: "Olá, sou a Sofia, como posso te ajudar?",
-      origin: "bot",
-    },
-    { type: "options", options: ["Relatório", "Dica", "Renegociação"] },
-    { type: "message", message: "Renegociação", origin: "user" },
-  ];
-
   return (
     <div className="chat-page">
-      <div className="chat-area">
-        <div className="chat-header">
-          <h2 className="title">Sofia</h2>
-          <h2 className="tagline">O seu assistente financeiro</h2>
+      <ChatProvider>
+        <div className="chat-area">
+          <div className="chat-header">
+            <h2 className="title">Sofia</h2>
+            <h2 className="tagline">O seu assistente financeiro</h2>
+          </div>
+          <div className="scrollable-area">
+            <MessageArea />
+          </div>
+          <div className="input-area">
+            <input className="input" placeholder="Digite aqui sua mensagem" />
+            <SendOutlined className="sendbutton" />
+          </div>
         </div>
-        <div className="scrollable-area">
-          <MessageArea messages={data} />
-        </div>
-        <div className="input-area">
-          <input className="input" placeholder="Digite aqui sua mensagem" />
-          <SendOutlined className="sendbutton" />
-        </div>
-      </div>
+      </ChatProvider>
     </div>
   );
 }
 
-function MessageArea({ messages }) {
+function MessageArea() {
+  const { messages } = useChatState();
+  const { pushMessage, showOptions, addListener } = useChatDispatch();
+
+  useEffect(() => {
+    pushMessage("Olá, sou a Sofia, como posso te ajudar?", "bot");
+    showOptions(["Relatório", "Dica", "Renegociação"]);
+    addListener((msg, ctx, setCtx) => {
+      if (msg === "Relatório")
+        pushMessage("O seu relatório mensal está aqui", "bot");
+    });
+  }, []);
+
   return (
     <div className="messages-area">
       {messages.map((item) => {
         if (item.type === "options")
-          return <OptionsGroup options={item.options} />;
+          return <OptionsGroup options={item.options} push={pushMessage} />;
 
         if (item.type === "message")
           return (
@@ -54,11 +52,28 @@ function MessageArea({ messages }) {
   );
 }
 
-function OptionsGroup({ options }) {
+function OptionsGroup({ options, push }) {
+  const [selected, setSelected] = useState(false);
+  const selectOption = useCallback(
+    (option) => {
+      if (selected) return;
+
+      setSelected(true);
+      push(option, "user");
+    },
+    [selected]
+  );
+
   return (
     <div className="options-group">
       {options.map((option) => (
-        <button className="option">{option}</button>
+        <button
+          key={option}
+          className="option"
+          onClick={() => selectOption(option)}
+        >
+          {option}
+        </button>
       ))}
     </div>
   );
