@@ -1,7 +1,11 @@
 import { createContext, useCallback, useContext, useState } from "react";
 
-const ChatStateContext = createContext({});
-const ChatDispatchContext = createContext({});
+const ChatStateContext = createContext({ messages: [] });
+const ChatDispatchContext = createContext({
+  pushMessage: null,
+  showOptions: null,
+  addListener: null,
+});
 
 export default function ChatProvider({ children }) {
   const [messages, setMessages] = useState([]);

@@ -12,7 +12,7 @@ export default function ChatPage() {
             <h2 className="tagline">O seu assistente financeiro</h2>
           </div>
           <div className="scrollable-area">
-            <MessageArea />
+            <MessagesWidget />
           </div>
           <div className="input-area">
             <input className="input" placeholder="Digite aqui sua mensagem" />
@@ -24,7 +24,7 @@ export default function ChatPage() {
   );
 }
 
-function MessageArea() {
+function MessagesWidget() {
   const { messages } = useChatState();
   const { pushMessage, showOptions, addListener } = useChatDispatch();
 
@@ -38,28 +38,45 @@ function MessageArea() {
   }, []);
 
   return (
+    <MessageArea
+      messages={messages}
+      pushAsUser={(msg) => pushMessage(msg, "user")}
+    />
+  );
+}
+
+function MessageArea({ messages, pushAsUser }) {
+  return (
     <div className="messages-area">
-      {messages.map((item) => {
+      {messages.map((item, idx) => {
         if (item.type === "options")
-          return <OptionsGroup options={item.options} push={pushMessage} />;
+          return (
+            <OptionsGroup
+              key={idx}
+              options={item.options}
+              onSelect={pushAsUser}
+            />
+          );
 
         if (item.type === "message")
           return (
-            <div className={`message -${item.origin}`}>{item.message}</div>
+            <div key={idx} className={`message -${item.origin}`}>
+              {item.message}
+            </div>
           );
       })}
     </div>
   );
 }
 
-function OptionsGroup({ options, push }) {
+function OptionsGroup({ options, onSelect }) {
   const [selected, setSelected] = useState(false);
   const selectOption = useCallback(
     (option) => {
       if (selected) return;
 
       setSelected(true);
-      push(option, "user");
+      onSelect(option);
     },
     [selected]
   );
