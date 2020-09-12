@@ -10,6 +10,13 @@ export default function ChatPage() {
     },
     { type: "options", options: ["Relatório", "Dica", "Renegociação"] },
     { type: "message", message: "Renegociação", origin: "user" },
+    {
+      type: "message",
+      message: "Olá, sou a Sofia, como posso te ajudar?",
+      origin: "bot",
+    },
+    { type: "options", options: ["Relatório", "Dica", "Renegociação"] },
+    { type: "message", message: "Renegociação", origin: "user" },
   ];
 
   return (
@@ -19,7 +26,9 @@ export default function ChatPage() {
           <h2 className="title">Sofia</h2>
           <h2 className="tagline">O seu assistente financeiro</h2>
         </div>
-        <MessageArea messages={data} />
+        <div className="scrollable-area">
+          <MessageArea messages={data} />
+        </div>
         <div className="input-area">
           <input className="input" placeholder="Digite aqui sua mensagem" />
           <SendOutlined className="sendbutton" />

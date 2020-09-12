@@ -47,15 +47,24 @@ html {
   line-height: 20px;
 }
 
-.chat-area > .messages-area {
+.chat-area > .scrollable-area {
+  display: flex;
+  flex-grow: 1;
+  overflow-y: scroll;
+}
+
+.scrollable-area {
+  border-top: 2px solid #f3f3f7;
+  border-bottom: 2px solid #f3f3f7;
+}
+
+.scrollable-area > .messages-area {
   flex-grow: 1;
   width: 100%;
 }
 
 .messages-area {
   align-items: flex-start;
-  border-top: 2px solid #f3f3f7;
-  border-bottom: 2px solid #f3f3f7;
   display: flex;
   flex-direction: column;
   padding: 16px;
