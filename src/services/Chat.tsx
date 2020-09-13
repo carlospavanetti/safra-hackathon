@@ -5,6 +5,7 @@ const ChatDispatchContext = createContext({
   pushMessage: null,
   showOptions: null,
   addListener: null,
+  setContext: null,
 });
 
 export default function ChatProvider({ children }) {
@@ -16,7 +17,7 @@ export default function ChatProvider({ children }) {
     (message, origin) => {
       setMessages((m) => [...m, { type: "message", message, origin }]);
       if (origin === "user") {
-        listeners.forEach((cb) => cb(message, context, setContext));
+        listeners.forEach((cb) => cb(message, context));
       }
     },
     [context, listeners]
@@ -30,7 +31,7 @@ export default function ChatProvider({ children }) {
 
   return (
     <ChatDispatchContext.Provider
-      value={{ addListener, pushMessage, showOptions }}
+      value={{ addListener, pushMessage, setContext, showOptions }}
     >
       <ChatStateContext.Provider value={{ messages }}>
         {children}
