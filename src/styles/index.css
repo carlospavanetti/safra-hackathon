@@ -147,3 +147,12 @@ html {
 .input-area > .sendbutton:hover {
   color: #5f7cee;
 }
+
+.morning-call > .link {
+  color: #039be5;
+  text-decoration: none;
+}
+.morning-call > .description {
+  margin-top: 8px;
+  font-size: 14px;
+}

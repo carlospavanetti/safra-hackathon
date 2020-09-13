@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
+import { fetchMorningCalls } from "./Api";
 import { useChatDispatch } from "./Chat";
 
 function waitForMs(time) {
@@ -52,13 +53,24 @@ export default function useDialog() {
     }
   }
 
-  function tipListener(msg, ctx) {
+  async function tipListener(msg, ctx) {
     if (msg === "Dica" || (msg === "Sim" && ctx === "conferir-analises")) {
+      const calls = await fetchMorningCalls();
+      const links = calls.map((c) => (
+        <div className="morning-call">
+          <a className="link" href={c.links[0].href}>
+            {c.title}
+          </a>
+          <p className="description">{c.description}</p>
+        </div>
+      ));
       pushMessage("Estas são as morning calls selecionadas para você:", "bot");
+      links.forEach((link) => pushMessage(link, "bot"));
       pushMessage(
         "Para outras análises, consulte nossos especialistas 😁",
         "bot"
       );
+      await waitForMs(4000);
       showCSat();
     }
   }
