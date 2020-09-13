@@ -1,3 +1,4 @@
+import { YoutubeOutlined } from "@ant-design/icons";
 import React, { useEffect } from "react";
 import { fetchMorningCalls } from "./Api";
 import { useChatDispatch } from "./Chat";
@@ -58,9 +59,12 @@ export default function useDialog() {
       const calls = await fetchMorningCalls();
       const links = calls.map((c) => (
         <div className="morning-call">
-          <a className="link" href={c.links[0].href}>
-            {c.title}
-          </a>
+          <div className="morningcall-header">
+            <a className="link" href={c.links[0].href}>
+              {c.title}
+            </a>
+            <YoutubeOutlined className="symbol" />
+          </div>
           <p className="description">{c.description}</p>
         </div>
       ));

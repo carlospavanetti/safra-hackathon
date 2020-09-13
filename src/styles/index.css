@@ -148,10 +148,20 @@ html {
   color: #5f7cee;
 }
 
-.morning-call > .link {
+.morningcall-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.morningcall-header > .link {
   color: #039be5;
   text-decoration: none;
 }
+
+.morningcall-header > .symbol {
+  color: #039be5;
+}
+
 .morning-call > .description {
   margin-top: 8px;
   font-size: 14px;
