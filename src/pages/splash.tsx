@@ -6,7 +6,7 @@ export default function SplashPage() {
   const router = useRouter();
 
   useEffect(() => {
-    setTimeout(() => router.push("/"), 2000);
+    setTimeout(() => router.push("/"), 3000);
   }, []);
 
   return (

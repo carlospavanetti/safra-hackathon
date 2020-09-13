@@ -45,9 +45,6 @@ export default function useDialog() {
   }
 
   async function reportListener(msg, ctx) {
-    function resize(ev) {
-      ev.target.style.height = ev.target.scrollHeight + "px";
-    }
     if (msg === "Relatório") {
       const report = await fetchReport();
       const iframe = (
@@ -60,6 +57,7 @@ export default function useDialog() {
         />
       );
       pushMessage("O seu relatório mensal está aqui", "bot");
+      await waitForMs(750);
       pushMessage(iframe);
       await waitForMs(4000);
       pushMessage("Quer conferir análises exclusivas?", "bot");
@@ -138,9 +136,12 @@ export default function useDialog() {
   }
 
   useEffect(() => {
-    pushMessage("Olá, sou a Sofia, como posso te ajudar?", "bot");
-    showOptions(["Relatório", "Dica", "Renegociação"]);
-
+    async function dialog() {
+      await waitForMs(1500);
+      pushMessage("Olá, sou a Sofia, como posso te ajudar?", "bot");
+      await waitForMs(1000);
+      showOptions(["Relatório", "Dica", "Renegociação"]);
+    }
     addListener(reportListener);
     addListener(tipListener);
     addListener(renegotiationListener);
@@ -148,5 +149,7 @@ export default function useDialog() {
     addListener((msg, ctx) => {
       if (msg === "Não") showCSat();
     });
+
+    dialog();
   }, []);
 }
