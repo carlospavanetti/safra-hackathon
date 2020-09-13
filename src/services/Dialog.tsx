@@ -18,7 +18,6 @@ export default function useDialog() {
   } = useChatDispatch();
 
   async function showCSat() {
-    setContext(null);
     await waitForMs(1000);
     pushMessage("Como você classifica o meu atendimento?", "bot");
     showOptions([
@@ -29,7 +28,6 @@ export default function useDialog() {
   }
 
   async function finishChat() {
-    setContext(null);
     await waitForMs(1000);
     pushMessage(
       "Conte com o Safra! Estamos com você nos momentos mais importantes.",
@@ -60,14 +58,22 @@ export default function useDialog() {
       await waitForMs(750);
       pushMessage(iframe);
       await waitForMs(4000);
-      pushMessage("Quer conferir análises exclusivas?", "bot");
-      setContext("conferir-analises");
-      showOptions(["Sim", "Não"]);
+
+      if (ctx === "negativo") {
+        pushMessage("Deseja avaliar uma renegociação de dívidas?", "bot");
+        setContext("renegociar");
+        showOptions(["Sim", "Não"]);
+      } else {
+        pushMessage("Quer conferir análises exclusivas?", "bot");
+        setContext("conferir-analises");
+        showOptions(["Sim", "Não"]);
+      }
     }
   }
 
   async function tipListener(msg, ctx) {
     if (msg === "Dica" || (msg === "Sim" && ctx === "conferir-analises")) {
+      setContext("negativo");
       const calls = await fetchMorningCalls();
       const links = calls.map((c) => (
         <div className="morning-call">
