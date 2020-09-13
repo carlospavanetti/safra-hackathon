@@ -1,6 +1,6 @@
 import { YoutubeOutlined } from "@ant-design/icons";
 import React, { useEffect } from "react";
-import { fetchMorningCalls } from "./Api";
+import { fetchMorningCalls, fetchReport } from "./Api";
 import { useChatDispatch } from "./Chat";
 
 function waitForMs(time) {
@@ -44,10 +44,24 @@ export default function useDialog() {
     ]);
   }
 
-  function reportListener(msg, ctx) {
+  async function reportListener(msg, ctx) {
+    function resize(ev) {
+      ev.target.style.height = ev.target.scrollHeight + "px";
+    }
     if (msg === "Relatório") {
+      const report = await fetchReport();
+      const iframe = (
+        <iframe
+          src={report}
+          frameBorder={0}
+          width={360}
+          height={1250}
+          scrolling="no"
+        />
+      );
       pushMessage("O seu relatório mensal está aqui", "bot");
-      pushMessage("...[Relatório]", "bot");
+      pushMessage(iframe);
+      await waitForMs(4000);
       pushMessage("Quer conferir análises exclusivas?", "bot");
       setContext("conferir-analises");
       showOptions(["Sim", "Não"]);
@@ -106,7 +120,7 @@ export default function useDialog() {
 
   function satisfactionListener(msg, ctx) {
     if (msg === "Estou bem, obrigado(a)") {
-      pushMessage("Então até mais, estou por aqui se precisar!", "bot");
+      pushMessage("Até mais, estou por aqui se precisar!", "bot");
     }
 
     if (msg.indexOf("Pouco satisfeito") === 0 || msg === "Indiferente") {
