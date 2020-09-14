@@ -1,6 +1,6 @@
 # Sofia - Chatbot para o desafio Hackathon Safra 2020
 
-Este é o protótipo apresentado no Hackathon Safra 2020 pelo tiime 3, composto pelos seguintes integrantes:
+Este é o protótipo apresentado no Hackathon Safra 2020 pelo time 3, composto pelos seguintes integrantes:
 
 - Camila Vieira
 - Carlos Pavanetti
